@@ -1,0 +1,4 @@
+interface:
+  display_name: "Popcorn CLI"
+  short_description: "通过 popcorn-cli 命令行提交 Popcorn 任务并查询模型与任务状态"
+  default_prompt: "使用 $popcorn-cli 通过命令行提交 Popcorn 任务、查询可用模型或检查任务状态。"
