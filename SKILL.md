@@ -1,6 +1,6 @@
 ---
 name: popcorn-cli
-description: popcorn-cli 是爆米花系统（Popcorn）的官方 CLI。需要生图、生视频时即可使用本工具：通过本地 API Key 查询可用模型、异步提交任务、按会话/任务 ID 查询最终结果。当要在终端、脚本或 Agent 流程中完成生图/生视频相关能力时使用此 skill。
+description: popcorn-cli 是爆米花系统（Popcorn）的官方 CLI。需要生图、生视频时即可使用本工具：通过本地 API Key 查询可用模型、异步提交任务、按会话/任务 ID 查询最终结果。注意：API Key 会保存在本机配置文件中，任务参数、提示词和生成配置会发送到远程 Popcorn 后端；不要在共享机器、日志、提示词或任务参数中暴露敏感信息。
 version: 0.1.1
 metadata:
   openclaw:
@@ -22,6 +22,12 @@ metadata:
 # popcorn-cli
 
 **popcorn-cli 是爆米花（Popcorn）的命令行客户端；需要生图、生视频时，直接使用本 CLI 即可完成模型查询、任务提交与结果查询。** 按任务类型分组组织命令，面向脚本化、自动化和 Agent 场景。
+
+## 安全与隐私提示
+
+- **API Key 本地存储**：`popcorn-cli config set-key` 会把 API Key 保存到 `~/.popcorn-cli/config.json`。该配置文件属于本机明文凭据存储，请不要提交到 Git、复制到日志、截图或共享给其他用户；在共享工作站、CI、Agent 运行环境中应限制 home 目录和配置文件访问权限。
+- **远程传输**：执行 `models`、`submit`、`task list` 时，CLI 会调用远程 Popcorn 后端服务。`submit --params` 中的提示词、媒体生成参数、业务上下文、会话 ID 等会随请求发送到 Popcorn 后端；不要把密码、密钥、个人隐私、未授权客户资料或其他机密内容放入任务参数。
+- **输出处理**：命令返回的 `task_id`、`session_id`、`result` URL 和错误信息可能包含业务上下文或资源地址。请按敏感数据处理，不要无意写入公开日志、公开 issue、聊天记录或可被无关人员读取的构建产物。
 
 ## 概念
 
@@ -59,6 +65,8 @@ metadata:
 CLI 不接受在命令行显式传入 API Key，统一从本地配置读取。
 
 **配置文件位置**：`~/.popcorn-cli/config.json`
+
+**用户警告**：该配置文件会在本机保存 API Key，属于明文 secret 存储。请确保文件只对当前用户可读，不要把 `~/.popcorn-cli/config.json` 纳入备份共享、代码仓库、日志采集或公开工单。若怀疑 API Key 泄露，应立即在 Popcorn 后台吊销并重新生成。
 
 **配置字段**：
 
